@@ -2,10 +2,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.sun.javafx.collections.MappingChange;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.*;
 
 /**
@@ -41,8 +38,10 @@ public class JsonFileWash {
         while ((recordData = bufferedReader.readLine()) != null) {
             JSONObject jsonObj = JSONObject.parseObject(recordData);
             String valueAuthor = jsonObj.getString("作者");
+
             String valueEditors = jsonObj.getString("责编");
             if (valueAuthor != null) {
+                valueAuthor.replaceAll("、",";");
                 String[] authors = valueAuthor.split(";");
                 if (authors.length == 1) {
                     if (!authorMap.containsKey(valueAuthor)) {
@@ -155,9 +154,32 @@ public class JsonFileWash {
             }
 
         }
-
-    //System.out.println(JSON.toJSONString(authorMap.get("余金虎")));
-    System.out.println(JSON.toJSONString(authorMap.get("赵立新")));
+        BufferedWriter tempFile = new BufferedWriter(new FileWriter(new File("temp.txt")));
+    //System.out.println(JSON.toJSONString(authorMap.get("陈金财")));
+        ArrayList<String> nameList = new ArrayList<String>();
+        ArrayList<String> edgeList = new ArrayList<String>();
+    for(String akey : authorMap.keySet()){
+        AuthorData aAuthorData = authorMap.get(akey);
+        String tempAuthorName = aAuthorData.authorName.replaceAll(" ", "");
+        if(!nameList.contains(tempAuthorName)){
+            tempFile.write("CREATE ("+ tempAuthorName +":Person {name:'"+ tempAuthorName +"'})"+"\n");
+            nameList.add(tempAuthorName);
+        }
+        ArrayList<String> editorsOfAuthor = aAuthorData.editors;
+        for(int ii = 0; ii < editorsOfAuthor.size(); ii++){
+            String tempEditorName = editorsOfAuthor.get(ii).replaceAll(" ", "");
+            if(!nameList.contains(tempEditorName)) {
+                tempFile.write("CREATE (" + tempEditorName + ":Person {name:'" + tempEditorName + "'})" + "\n");
+                nameList.add(tempEditorName);
+            }
+            String tempCommand = "CREATE ("+tempEditorName+")-[:EditorOf]->("+tempAuthorName+")"+"\n";
+            if(!edgeList.contains(tempCommand)){
+            tempFile.write("CREATE ("+tempEditorName+")-[:EditorOf]->("+tempAuthorName+")"+"\n");
+            edgeList.add(tempCommand);
+            }
+        }
+    }
+    tempFile.close();
     }
 }
 
