@@ -6,6 +6,8 @@ CREATE (商婧、何梦舒:Person {name:'商婧、何梦舒'})
 CREATE (杨祖荣)-[:EditorOf]->(商婧、何梦舒)
 CREATE (庞清杰)-[:EditorOf]->(商婧、何梦舒)
 CREATE (陈  明:Person {name:'陈  明'})
+(席严峰任旭:Person {name:'席严峰任旭'})
+CREATE (席严峰任旭)-[:EditorOf]->(陈千学)
 
 # most popular authors
 丁雅涵
