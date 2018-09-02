@@ -8,6 +8,7 @@ CREATE (庞清杰)-[:EditorOf]->(商婧、何梦舒)
 CREATE (陈  明:Person {name:'陈  明'})
 (席严峰任旭:Person {name:'席严峰任旭'})
 CREATE (席严峰任旭)-[:EditorOf]->(陈千学)
+(版面编辑／林飞:Person {name:'版面编辑／林飞'})
 
 # most popular authors
 丁雅涵
