@@ -40,19 +40,23 @@ public class JsonFileWash {
             String valueAuthor = jsonObj.getString("作者");
 
             String valueEditors = jsonObj.getString("责编");
+            if(valueEditors != null){
+                valueEditors = valueEditors.replaceAll("版面编辑／","").replaceAll("版条#+\\d{4}","")
+                        .replaceAll("席严峰任旭","席严峰;任旭");
+            }
             if (valueAuthor != null) {
-                valueAuthor.replaceAll("、",";");
+                valueAuthor = valueAuthor.replaceAll("、",";");
+                valueAuthor = valueAuthor.replaceAll("·",";");
+
                 String[] authors = valueAuthor.split(";");
                 if (authors.length == 1) {
                     if (!authorMap.containsKey(valueAuthor)) {
                         AuthorData authorData = new AuthorData();
                         //去除名字后的等字样
-
-
                         authorData.authorName = valueAuthor.replaceAll("等", "");
 
                         if (valueEditors != null) {
-                            String[] editors = jsonObj.getString("责编").split(";");
+                            String[] editors = valueEditors.split(";");
                             for(int i = 0; i < editors.length; i++) {
                                 authorData.editors.add(editors[i]);
                             }
@@ -71,8 +75,9 @@ public class JsonFileWash {
                     } else {
                         AuthorData authorData = authorMap.get(valueAuthor);
                         if (valueEditors != null) {
-                            String[] editors = jsonObj.getString("责编").split(";");
+                            String[] editors = valueEditors.split(";");
                             for(int i = 0; i < editors.length; i++) {
+
                                 authorData.editors.add(editors[i]);
                             }
                         }
@@ -97,9 +102,9 @@ public class JsonFileWash {
                             authorData01.authorName = authors[i].replaceAll("等", "");
 
                             if (valueEditors != null) {
-                                String[] editors = jsonObj.getString("责编").split(";");
+                                String[] editors = valueEditors.split(";");
                                 for(int j = 0; j < editors.length; j++) {
-                                    authorData01.editors.add(editors[j]);
+                                  authorData01.editors.add(editors[j]);
                                 }
                             }
 
@@ -123,9 +128,9 @@ public class JsonFileWash {
                         }else{
                             AuthorData authorData01 = authorMap.get(authors[i]);
                             if (valueEditors != null) {
-                                String[] editors = jsonObj.getString("责编").split(";");
+                                String[] editors = valueEditors.split(";");
                                 for(int k = 0; k < editors.length; k++) {
-                                    authorData01.editors.add(editors[k]);
+                                   authorData01.editors.add(editors[k]);
                                 }
                             }
                             authorData01.articleTitles.add(jsonObj.getString("标题"));
@@ -154,11 +159,14 @@ public class JsonFileWash {
             }
 
         }
+
         BufferedWriter tempFile = new BufferedWriter(new FileWriter(new File("temp.txt")));
-    //System.out.println(JSON.toJSONString(authorMap.get("陈金财")));
+
         ArrayList<String> nameList = new ArrayList<String>();
         ArrayList<String> edgeList = new ArrayList<String>();
+        int ik=0;
     for(String akey : authorMap.keySet()){
+        System.out.println(ik++);
         AuthorData aAuthorData = authorMap.get(akey);
         String tempAuthorName = aAuthorData.authorName.replaceAll(" ", "");
         if(!nameList.contains(tempAuthorName)){

@@ -3,12 +3,19 @@ we work form a json file, mainly use fastjson from alibaba and also take one jso
 
 ## some faults
 CREATE (商婧、何梦舒:Person {name:'商婧、何梦舒'})
+CREATE (陈占杰、刘咏秋:Person {name:'陈占杰、刘咏秋'})
+CREATE (林茂发、欧阳大名:Person {name:'林茂发、欧阳大名'})
+
 CREATE (杨祖荣)-[:EditorOf]->(商婧、何梦舒)
 CREATE (庞清杰)-[:EditorOf]->(商婧、何梦舒)
 CREATE (陈  明:Person {name:'陈  明'})
 (席严峰任旭:Person {name:'席严峰任旭'})
 CREATE (席严峰任旭)-[:EditorOf]->(陈千学)
-(版面编辑／林飞:Person {name:'版面编辑／林飞'})
+CREATE (严珊版条###0504:Person {name:'严珊版条###0504'})
+CREATE (严珊版条###0504)-[:EditorOf]->(张以忠)
+CREATE (巴哈尔古丽哈力克:Person {name:'巴哈尔古丽哈力克'})
+CREATE (邱明全)-[:EditorOf]->(巴哈尔古丽哈力克)
+"CREATE (版面编辑／林飞)-[:EditorOf]->(商志勇)"
 
 # most popular authors
 丁雅涵
