@@ -1,6 +1,4 @@
-import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.sun.javafx.collections.MappingChange;
 
 import java.io.*;
 import java.util.*;
@@ -11,12 +9,14 @@ import java.util.concurrent.atomic.AtomicInteger;
  * basic idea: convert the json file to the neo4j commands. have to create the nodes and edges info
  * from json file.
  */
+
 public class JsonFileWash {
     public static void main(String[] args) throws IOException {
-        //read the source file
-        File file = new File("test.txt");
+        //Read the original data source with json format
+        File file = new File("dataJson.txt");
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
+        //Generate the category mapping data
         File fileCategory = new File("category.txt");
         BufferedReader bufferedReaderCategory = new BufferedReader(new FileReader(fileCategory));
         StringBuilder categoryJson = new StringBuilder();
@@ -41,12 +41,14 @@ public class JsonFileWash {
             String valueAuthor = jsonObj.getString("作者");
 
             String valueEditors = jsonObj.getString("责编");
+            //some dirty data will be cleared;
             if (valueEditors != null) {
+                editorDataCheck(valueEditors);
                 valueEditors = valueEditors.replaceAll("版面编辑／", "").replaceAll("版条#+\\d{4}", "")
                         .replaceAll("席严峰任旭", "席严峰;任旭");
             }
 
-            //if the author is blank which means no author listed, the related article will be removed.
+            //If the author is blank which means no author listed, the related article will be removed.
             if (valueAuthor != null) {
                 valueAuthor = valueAuthor.replaceAll("、", ";").replaceAll("·", ";").replaceAll(" \\s+", ";");
 
@@ -168,11 +170,27 @@ public class JsonFileWash {
         AtomicInteger counter_integer = new AtomicInteger();
         for (String authorKey : authorMap.keySet()) {
             if (authorKey.length() >= 4)
-                System.out.println(authorKey);
+                ;
+                //System.out.println(authorKey);
         }
 
     }
 
+    public static void editorDataCheck(String editorNames){
+        if(editorNames.matches("^([\\u4E00-\\u9FA5]|;)+")) {
+            if(editorNames.contains("等"))
+                System.out.println(editorNames);
+            String[] editorNameArray = editorNames.split(";");
+            for(int i = 0; i < editorNameArray.length; i++) {
+                if(editorNameArray[i].length() > 3){
+                    System.out.println(editorNameArray[i]);
+                }
+            }
+        }
+        else{
+            System.out.println(editorNames);
+        }
+    }
 }
 
 
