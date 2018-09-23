@@ -9,3 +9,31 @@ public class AuthorData {
     public ArrayList<String> pageName = new ArrayList(); //版名
     public ArrayList<String> type = new ArrayList(); //体裁
 }
+
+/**
+ * the author entity definition in AIAS
+ *     private String authorName;
+ *     private String cellNumber;
+ *     private String phoneNumber;
+ *     private String QQ;
+ *     private String weChat;
+ *     private String emailAddress;
+ *     private String organizationName;
+ *     private String mailAddress;
+ *     private String zipCode;
+ *     private String workCityName;
+ *     private String workProvinceName;
+ *
+ *
+ * the article entity definition in AIAS
+ *     private String    eyebrowTitle;
+ *     private String    mainTitle;
+ *     private String    subTitle;
+ *     private String    authorsName;
+ *     private String    editorsName;
+ *     private String    pageName;
+ *     private String    paperCategory;
+ *     private String    publishDate;
+ *     private String    paperType;
+ *     private String    articleText;
+ * **/
