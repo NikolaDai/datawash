@@ -13,7 +13,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class JsonFileWash {
     public static void main(String[] args) throws IOException {
         //Read the original data source with json format
-        File file = new File("dataJson.txt");
+        File file = new File("test.txt");
         BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
 
         File nameFile = new File("authorList.txt");
@@ -79,10 +79,10 @@ public class JsonFileWash {
                         authorData.articleTitles.add(jsonObj.getString("标题"));
                         String categoryName = jsonObj.getString("分类");
 
-                        if (categoryName != null) authorData.category.add(categoryName);
+                        if (categoryName != null && !authorData.category.contains(categoryName)) authorData.category.add(categoryName);
 
-                        authorData.type.add(jsonObj.getString("体裁"));
-                        authorData.pageName.add(jsonObj.getString("版名"));
+                        if(!authorData.type.contains(jsonObj.getString("体裁"))) authorData.type.add(jsonObj.getString("体裁"));
+                        if(!authorData.pageName.contains(jsonObj.getString("版名"))) authorData.pageName.add(jsonObj.getString("版名"));
 
                         if (jsonObj.getString("体裁") != "广告")
                             authorMap.put(authorData.authorName, authorData);
@@ -99,10 +99,10 @@ public class JsonFileWash {
 
                         String categoryName = jsonObj.getString("分类");
 
-                        if (categoryName != null) authorData.category.add(categoryName);
+                        if (categoryName != null && !authorData.category.contains(categoryName)) authorData.category.add(categoryName);
 
-                        authorData.type.add(jsonObj.getString("体裁"));
-                        authorData.pageName.add(jsonObj.getString("版名"));
+                        if(!authorData.type.contains(jsonObj.getString("体裁"))) authorData.type.add(jsonObj.getString("体裁"));
+                        if(!authorData.pageName.contains(jsonObj.getString("版名"))) authorData.pageName.add(jsonObj.getString("版名"));
 
                         if (jsonObj.getString("体裁") != "广告")
                             authorMap.put(authorData.authorName, authorData);
@@ -122,10 +122,10 @@ public class JsonFileWash {
 
                             authorData01.articleTitles.add(jsonObj.getString("标题"));
                             String categoryName = jsonObj.getString("分类");
-                            if (categoryName != null) authorData01.category.add(categoryName);
+                            if (categoryName != null  && !authorData01.category.contains(categoryName)) authorData01.category.add(categoryName);
 
-                            authorData01.type.add(jsonObj.getString("体裁"));
-                            authorData01.pageName.add(jsonObj.getString("版名"));
+                            if(!authorData01.type.contains(jsonObj.getString("体裁"))) authorData01.type.add(jsonObj.getString("体裁"));
+                            if(!authorData01.pageName.contains(jsonObj.getString("版名"))) authorData01.pageName.add(jsonObj.getString("版名"));
 
                             String[] coauthors = jsonObj.getString("作者").split(";");
                             for (int k = 0; k < coauthors.length; k++) {
@@ -148,10 +148,10 @@ public class JsonFileWash {
 
                             String categoryName = jsonObj.getString("分类");
 
-                            if (categoryName != null) authorData01.category.add(categoryName);
+                            if (categoryName != null && !authorData01.category.contains(categoryName)) authorData01.category.add(categoryName);
 
-                            authorData01.type.add(jsonObj.getString("体裁"));
-                            authorData01.pageName.add(jsonObj.getString("版名"));
+                            if(!authorData01.type.contains(jsonObj.getString("体裁"))) authorData01.type.add(jsonObj.getString("体裁"));
+                            if(!authorData01.pageName.contains(jsonObj.getString("版名"))) authorData01.pageName.add(jsonObj.getString("版名"));
 
                             String[] coauthors = jsonObj.getString("作者").split(";");
 
@@ -166,14 +166,28 @@ public class JsonFileWash {
                     }
                 }
                 }
+                else{
+                    //System.out.println(jsonObj.toString());
+            }
 
             }
             AtomicInteger counter_integer = new AtomicInteger();
 
+            String authorKey_1 = null;
             for (String authorKey : authorMap.keySet()) {
                 //System.out.println(authorKey + "#" + authorMap.get(authorKey).editors + "#" + authorMap.get(authorKey).coauthors
                 //       + "#" + authorMap.get(authorKey).articleTitles);
-                bufferedWriter.write(authorKey+"\n");
+                if(authorKey.contains("等")) {
+                    authorKey_1 = authorKey.replaceAll("等", "");
+                    bufferedWriter.write(authorKey_1  + "\t" + authorMap.get(authorKey).editors.toString() + "\t" + authorMap.get(authorKey).coauthors.toString()
+                            + "\t" + authorMap.get(authorKey).category.toString()  + "\t" + authorMap.get(authorKey).pageName.toString()
+                            + "\t" + authorMap.get(authorKey).type.toString() + "\t" + authorMap.get(authorKey).articleTitles.toString() + "\n");
+                }
+                else{
+                    bufferedWriter.write(authorKey  + "\t" + authorMap.get(authorKey).editors.toString() + "\t" + authorMap.get(authorKey).coauthors.toString()
+                            + "\t" + authorMap.get(authorKey).category.toString()  + "\t" + authorMap.get(authorKey).pageName.toString()
+                            + "\t" + authorMap.get(authorKey).type.toString() + "\t" + authorMap.get(authorKey).articleTitles.toString() + "\n");
+                }
             }
 
             bufferedWriter.close();
