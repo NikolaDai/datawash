@@ -29,3 +29,6 @@ return 丁雅涵,n
 
 match(n)
 return(n)
+
+导入数据
+mysql> load data infile "D://wamp64//tmp//authorList.txt" into table authorfeature fields terminated by '\t' lines terminated by '\n';
