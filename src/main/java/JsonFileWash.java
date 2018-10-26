@@ -23,20 +23,6 @@ public class JsonFileWash {
         File nameListFile = new File("authorNameList.txt");
         BufferedWriter bufferedListWriter = new BufferedWriter(new FileWriter(nameListFile));
 
-
-        //Generate the category mapping data
-        /*
-        File fileCategory = new File("category.txt");
-        BufferedReader bufferedReaderCategory = new BufferedReader(new FileReader(fileCategory));
-        StringBuilder categoryJson = new StringBuilder();
-        String tempData;
-        while ((tempData = bufferedReaderCategory.readLine()) != null) {
-            categoryJson.append(tempData);
-        }
-        String jsonCategoryString = categoryJson.toString().replace("}{", ",");
-        JSONObject jsonObjCategory = JSONObject.parseObject(jsonCategoryString);
-        */
-
         //each line of the file is a record including all the information
         String recordData;
 
@@ -54,17 +40,13 @@ public class JsonFileWash {
 
             //If the author is blank which means no author listed, the related article will be removed.
             if (valueAuthor != null) {
-                //editorDataCheck(valueAuthor);
-                //valueAuthor = valueAuthor.replaceAll("、", ";").replaceAll("·", ";").replaceAll(" \\s+", ";");
-                //make the space disappear
-                valueAuthor = valueAuthor.replaceAll(" \\s+", "");
-                if(valueEditors != null)
-                    valueEditors = valueEditors.replaceAll(" \\s+", "");
+                valueAuthor = valueAuthor.replaceAll(" \\s+", "").replaceAll("等","");
 
                 String[] authors = valueAuthor.split(";");
-
                 String[] editors = null;
-                if (valueEditors != null) {
+
+                if(valueEditors != null) {
+                    valueEditors = valueEditors.replaceAll(" \\s+", "");
                     editors = valueEditors.split(";");
                 }
 
@@ -92,14 +74,15 @@ public class JsonFileWash {
                         if(jsonObj.getString("栏目") != null) {
                             String[] columnArray = jsonObj.getString("栏目").split(";");
                             for (int i = 0; i < columnArray.length; i++)
-                                if (!authorData.pageName.contains(columnArray[i]))
+                                if (!authorData.columnName.contains(columnArray[i]))
                                     authorData.columnName.add(columnArray[i]);
                         }
 
-                        if (jsonObj.getString("体裁") != "广告")
+                        if (jsonObj.getString("体裁")!=null && !jsonObj.getString("体裁").contains("广告"))
                             authorMap.put(authorData.authorName, authorData);
                     } else {
                         AuthorData authorData = authorMap.get(valueAuthor);
+                        authorData.articleNum++;
 
                         if (editors != null)
                             for (int i = 0; i < editors.length; i++) {
@@ -119,11 +102,11 @@ public class JsonFileWash {
                         if(jsonObj.getString("栏目") != null) {
                             String[] columnArray = jsonObj.getString("栏目").split(";");
                             for (int j = 0; j < columnArray.length; j++)
-                                if (!authorData.pageName.contains(columnArray[j]))
+                                if (!authorData.columnName.contains(columnArray[j]))
                                     authorData.columnName.add(columnArray[j]);
                         }
 
-                        if (jsonObj.getString("体裁") != "广告")
+                        if (jsonObj.getString("体裁")!=null && !jsonObj.getString("体裁").contains("广告"))
                             authorMap.put(authorData.authorName, authorData);
                     }
                 } else {
@@ -145,10 +128,11 @@ public class JsonFileWash {
 
                             if(!authorData01.type.contains(jsonObj.getString("体裁"))) authorData01.type.add(jsonObj.getString("体裁"));
                             if(!authorData01.pageName.contains(jsonObj.getString("版名"))) authorData01.pageName.add(jsonObj.getString("版名"));
+
                             if(jsonObj.getString("栏目") != null) {
                                 String[] columnArray = jsonObj.getString("栏目").split(";");
                                 for (int k = 0; k < columnArray.length; k++)
-                                    if (!authorData01.pageName.contains(columnArray[k]))
+                                    if (!authorData01.columnName.contains(columnArray[k]))
                                         authorData01.columnName.add(columnArray[k]);
                             }
 
@@ -158,10 +142,12 @@ public class JsonFileWash {
                                     authorData01.coauthors.add(coauthors[k]);
                             }
 
-                            if (jsonObj.getString("体裁") != "广告")
+                            if (jsonObj.getString("体裁")!=null && !jsonObj.getString("体裁").contains("广告"))
                                 authorMap.put(authorData01.authorName, authorData01);
                         } else {
                             AuthorData authorData01 = authorMap.get(authors[i]);
+
+                            authorData01.articleNum++;
 
                             if (editors != null)
                                 for (int j = 0; j < editors.length; j++) {
@@ -181,7 +167,7 @@ public class JsonFileWash {
                             if(jsonObj.getString("栏目") != null) {
                                 String[] columnArray = jsonObj.getString("栏目").split(";");
                                 for (int j = 0; j < columnArray.length; j++)
-                                    if (!authorData01.pageName.contains(columnArray[j]))
+                                    if (!authorData01.columnName.contains(columnArray[j]))
                                         authorData01.columnName.add(columnArray[j]);
                             }
 
@@ -192,7 +178,7 @@ public class JsonFileWash {
                                     authorData01.coauthors.add(coauthors[k]);
                             }
 
-                            if (jsonObj.getString("体裁") != "广告")
+                            if (jsonObj.getString("体裁")!=null && !jsonObj.getString("体裁").contains("广告"))
                                 authorMap.put(authorData01.authorName, authorData01);
                         }
                     }
@@ -207,20 +193,27 @@ public class JsonFileWash {
 
             String authorKey_1 = null;
             for (String authorKey : authorMap.keySet()) {
+                if(authorKey.contains("陈国全"))
+                    System.out.println(authorKey  + "\t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
+                            + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
+                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
+                            + " \t" + authorMap.get(authorKey).articleNum);
                 //System.out.println(authorKey + "#" + authorMap.get(authorKey).editors + "#" + authorMap.get(authorKey).coauthors
                 //       + "#" + authorMap.get(authorKey).articleTitles);
                 if(authorKey.contains("等")) {
                     authorKey_1 = authorKey.replaceAll("等", "");
-                    bufferedListWriter.write(authorKey_1 +'\n');
+                    bufferedListWriter.write(authorKey_1 + authorMap.get(authorKey).articleNum +'\n');
                     bufferedWriter.write(authorKey_1  + "\t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
                             + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
-                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString() + " \n");
+                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
+                            + " \t" + authorMap.get(authorKey).articleNum + " \n");
                 }
                 else{
-                    bufferedListWriter.write(authorKey +'\n');
+                    bufferedListWriter.write(authorKey + authorMap.get(authorKey).articleNum +'\n');
                     bufferedWriter.write(authorKey  + " \t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
                             + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
-                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString() + " \n");
+                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
+                            + " \t" + authorMap.get(authorKey).articleNum + " \n");
                 }
             }
             bufferedListWriter.close();

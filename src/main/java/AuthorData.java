@@ -9,6 +9,7 @@ public class AuthorData {
     public ArrayList<String> pageName = new ArrayList(); //版名
     public ArrayList<String> type = new ArrayList(); //体裁
     public ArrayList<String> columnName = new ArrayList(); //栏目名
+    public int articleNum = 1;
 }
 
 /**

@@ -32,3 +32,18 @@ return(n)
 
 导入数据
 mysql> load data infile "D://wamp64//tmp//authorList.txt" into table authorfeature fields terminated by '\t' lines terminated by '\n';
+
+
+deleted code:
+//Generate the category mapping data
+/*
+File fileCategory = new File("category.txt");
+BufferedReader bufferedReaderCategory = new BufferedReader(new FileReader(fileCategory));
+StringBuilder categoryJson = new StringBuilder();
+String tempData;
+while ((tempData = bufferedReaderCategory.readLine()) != null) {
+    categoryJson.append(tempData);
+}
+String jsonCategoryString = categoryJson.toString().replace("}{", ",");
+JSONObject jsonObjCategory = JSONObject.parseObject(jsonCategoryString);
+*/
