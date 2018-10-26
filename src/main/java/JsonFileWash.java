@@ -38,6 +38,7 @@ public class JsonFileWash {
 
             String valueEditors = jsonObj.getString("责编");
 
+
             //If the author is blank which means no author listed, the related article will be removed.
             if (valueAuthor != null) {
                 valueAuthor = valueAuthor.replaceAll(" \\s+", "").replaceAll("等","");
@@ -185,7 +186,7 @@ public class JsonFileWash {
                 }
                 }
                 else{
-                    //System.out.println(jsonObj.toString());
+                    //stem.out.println(jsonObj.toString());
             }
 
             }
@@ -193,13 +194,6 @@ public class JsonFileWash {
 
             String authorKey_1 = null;
             for (String authorKey : authorMap.keySet()) {
-                if(authorKey.contains("陈国全"))
-                    System.out.println(authorKey  + "\t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
-                            + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
-                            + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
-                            + " \t" + authorMap.get(authorKey).articleNum);
-                //System.out.println(authorKey + "#" + authorMap.get(authorKey).editors + "#" + authorMap.get(authorKey).coauthors
-                //       + "#" + authorMap.get(authorKey).articleTitles);
                 if(authorKey.contains("等")) {
                     authorKey_1 = authorKey.replaceAll("等", "");
                     bufferedListWriter.write(authorKey_1 + authorMap.get(authorKey).articleNum +'\n');
