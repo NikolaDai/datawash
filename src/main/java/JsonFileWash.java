@@ -196,14 +196,16 @@ public class JsonFileWash {
             for (String authorKey : authorMap.keySet()) {
                 if(authorKey.contains("等")) {
                     authorKey_1 = authorKey.replaceAll("等", "");
-                    bufferedListWriter.write(authorKey_1 + authorMap.get(authorKey).articleNum +'\n');
+                    //bufferedListWriter.write(authorKey_1 + authorMap.get(authorKey).articleNum +'\n');
+                    bufferedListWriter.write(authorKey_1+'\n');
                     bufferedWriter.write(authorKey_1  + "\t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
                             + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
                             + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
                             + " \t" + authorMap.get(authorKey).articleNum + " \n");
                 }
                 else{
-                    bufferedListWriter.write(authorKey + authorMap.get(authorKey).articleNum +'\n');
+                    //bufferedListWriter.write(authorKey + authorMap.get(authorKey).articleNum +'\n');
+                    bufferedListWriter.write(authorKey+'\n');
                     bufferedWriter.write(authorKey  + " \t" + authorMap.get(authorKey).editors.toString() + " \t" + authorMap.get(authorKey).coauthors.toString()
                             + " \t" + authorMap.get(authorKey).category.toString()  + " \t" + authorMap.get(authorKey).pageName.toString()
                             + " \t" + authorMap.get(authorKey).type.toString() + " \t" + authorMap.get(authorKey).articleTitles.toString() + " \t" + authorMap.get(authorKey).columnName.toString()
